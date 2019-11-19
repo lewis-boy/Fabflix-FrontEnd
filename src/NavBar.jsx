@@ -24,7 +24,9 @@ class NavBar extends Component {
             <NavLink className="nav-link" to="/movies">
               Movies
             </NavLink>
-            <button onClick={handleLogOut}>Log Out</button>
+            <button onClick={handleLogOut} className="nav-button">
+              Log Out
+            </button>
           </Fragment>
         )}
       </nav>

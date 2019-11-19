@@ -34,7 +34,7 @@ class Login extends Component {
     const { email, password } = this.state;
 
     return (
-      <div className="box">
+      <div>
         <h1>Login</h1>
         <form onSubmit={this.handleSubmit}>
           <label className="label">Email</label>
