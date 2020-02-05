@@ -1,10 +1,26 @@
 {
   "baseUrl": "http://localhost:12345/api/g",
-  "pollLimit": 10,
+  "basicMovieUrl": "https://image.tmdb.org/t/p/w1280",
+  "pollLimit": 3000,
+  "homePageGenre": "comedy",
+  "homePageLimit": 10,
   "gatewayEPs": {
     "reportEP": "/report"
   },
   "idmEPs": {
-    "loginEP": "/idm/login"
+    "loginEP": "/idm/login",
+    "registerEP": "/idm/register",
+    "sessionEP": "/idm/session",
+    "privilegeEP": "/idm/privilege"
+  },
+  "moviesEPs": {
+    "basicSearchEP": "/movies/search",
+    "randomEP": "/movies/random",
+    "thumbnailEP": "/movies/thumbnail",
+    "phraseSearchEP": "/movies/browse/",
+    "movieIdSearchEP": "/movies/get/",
+    "peopleMovieSearchEP": "/movies/people",
+    "basicPeopleSearchEP": "/movies/people/search",
+    "detailedPeopleSearchEP": "/movies/people/get/"
   }
 }

@@ -5,7 +5,7 @@ import Idm from "../services/Idm";
 import "../css/common.css";
 
 
-class Login extends Component {
+class Register extends Component {
     state = {
         email: "",
         password: "",
@@ -16,41 +16,34 @@ class Login extends Component {
     handleSubmit = e => {
         e.preventDefault();
 
-        const {handleLogIn} = this.props;
         const {email, password} = this.state;
 
         //todo on .then split into two routes based on response: correct login vs incorrect login
-        Idm.login(email, password)
+        Idm.register(email, password)
             .then(response => {
                 alert(JSON.stringify(response.data,null,4));
-                console.log(response);
                 switch(response["data"]["resultCode"]){
                     case -12:
-                    case 11:
+                    case 12:
+                    case 13:
                         this.setState({
                             emailError: "",
                             passwordError: response["data"]["message"]
-                        });break;
+                        });
+                        break;
                     case -11:
                     case -10:
+                    case 16:
                         this.setState({
                             emailError: response["data"]["message"],
                             passwordError: ""
-                        });break;
-                    case 14:
-                        this.setState({
-                            emailError: "User not found with provided credentials",
-                            passwordError: "User not found with provided credentials"
-                        });break;
-                    case 120:
-                        //there might be an error in this if we can somehow get back to the login page
-                        //error as in: the messages might still be up, if so find a way to clear error messages after login
-                        handleLogIn(email, response["data"]["session_id"]);
-                        this.props.history.push('/movies');
+                        });
+                        break;
+                    case 110:
+                        this.props.history.push("/login");
                         break;
                     default:
                 }
-                //handleLogIn(email, response["data"]["session_id"]);
             })
             .catch(error => {
                 if(error.response)
@@ -75,7 +68,7 @@ class Login extends Component {
         //todo have some react elements invisible but turn on when you get your first incorrect login
         return (
             <div>
-                <h1>Login</h1>
+                <h1>Register</h1>
                 <form onSubmit={this.handleSubmit}>
                     <label className="label">Email</label>
                     <input
@@ -86,7 +79,7 @@ class Login extends Component {
                         value={email}
                         onChange={this.updateField}
                     ></input>
-                    {this.state.emailError && <small className="loginError">{this.state.emailError}</small>}
+                    {this.state.emailError && <small className="loginRegisterError">{this.state.emailError}</small>}
                     <label className="label">Password</label>
                     <input
                         className="input"
@@ -96,12 +89,12 @@ class Login extends Component {
                         value={password}
                         onChange={this.updateField}
                     ></input>
-                    {this.state.passwordError && <small className="loginError">{this.state.passwordError}</small>}
-                    <button className="button">Login</button>
+                    {this.state.passwordError && <small className="loginRegisterError">{this.state.passwordError}</small>}
+                    <button className="button">Register</button>
                 </form>
             </div>
         );
     }
 }
 
-export default Login;
+export default Register;

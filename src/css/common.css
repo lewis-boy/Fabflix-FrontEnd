@@ -35,3 +35,7 @@
   background-color: var(--detail-color);
   box-shadow: inset 0px 0px 5px -2px #000000;
 }
+
+.loginRegisterError{
+  color: red;
+}

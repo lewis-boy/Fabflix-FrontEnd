@@ -1,0 +1,16 @@
+.wrapper{
+    width: auto;
+    margin: 0 0;
+}
+
+.wrapper .movie-gallery{
+    display:flex;
+    flex-direction: column;
+}
+
+.wrapper .movie-gallery .movie-item{
+    background-color: black;
+    position: relative;
+    width: calc(100vw - 50px);
+    height: 100%;
+}
