@@ -1,6 +1,6 @@
 import React, { Component } from "react";
-import Cookies from "js-cookie";
 import Axios from "axios";
+import {withRouter} from "react-router-dom";
 
 import NavBar from "./NavBar";
 import Content from "./Content";
@@ -13,8 +13,9 @@ class App extends Component {
   handleLogIn = (email, session_id) => {
     const { common } = Axios.defaults.headers;
 
-    Cookies.set("email", email);
-    Cookies.set("session_id", session_id);
+    localStorage.setItem("email", email);
+    localStorage.setItem("firstVisit", "true");
+    localStorage.setItem("session_id", session_id);
 
     common["email"] = email;
     common["session_id"] = session_id;
@@ -23,21 +24,36 @@ class App extends Component {
   };
 
   handleLogOut = () => {
+      console.log("We in Log out Handler");
     const { common } = Axios.defaults.headers;
+      console.log("Test 1");
 
-    Cookies.remove("email");
-    Cookies.remove("session_id");
+    localStorage.removeItem("email");
+    localStorage.removeItem("movies");
+    localStorage.removeItem("firstVisit");
+      console.log("Test 2");
 
+    localStorage.removeItem("session_id");
+      console.log("Test 3");
+
+    console.log("DELETING EMAIL SESSIONiD TRANSACTIONID REQUEST DELAY");
     delete common["email"];
     delete common["session_id"];
+    delete common["transaction_id"];
+    delete common["request_delay"];
 
     this.setState({ loggedIn: false });
+      console.log("Test 5");
+    this.props.history.push("/");
+      console.log("Test 6");
   };
 
   checkedLoggedIn() {
+    console.log(localStorage.getItem("email") !== null ? localStorage.getItem("email") : "EMAIL does not exist")
+    console.log(localStorage.getItem("session_id") !== null ? localStorage.getItem("session_id") : "SESSIONID does not exist")
     return (
-      Cookies.get("email") !== undefined &&
-      Cookies.get("session_id") !== undefined
+      localStorage.getItem("email") !== null &&
+      localStorage.getItem("session_id") !== null
     );
   }
 
@@ -47,10 +63,11 @@ class App extends Component {
     return (
       <div className="app">
         <NavBar handleLogOut={this.handleLogOut} loggedIn={loggedIn} />
-        <Content handleLogIn={this.handleLogIn} />
+        <Content handleLogOut={this.handleLogOut}
+                 handleLogIn={this.handleLogIn} />
       </div>
     );
   }
 }
 
-export default App;
+export default withRouter(App);

@@ -2,55 +2,154 @@ import React, {Component, Fragment} from "react";
 
 
 import "../css/home.css";
+import "../css/common.css";
 
 import Movie from "../services/Movie";
-import {httpErrorCheck} from "../util/ErrorChecking";
-import {basicMovieUrl} from "../Config.json";
+import {basicMovieUrl, basicStarUrl} from "../Config.json";
+import {FontAwesomeIcon} from '@fortawesome/react-fontawesome';
+import {
+    faChevronLeft,
+    faChevronRight,
+    faCopyright,
+} from "@fortawesome/free-solid-svg-icons";
+import {Link} from "react-router-dom";
+
 
 class Home extends Component {
     state = {
+        movies: [],
         frontPage: "",
-        midPageSlide: "",
-        midIndex: 0,
-        starPage: "",
-        starIndex: 0,
+        midPageSlide: [],
+        midX: 0,
+        starPage: [],
+        starX: 0,
         timer: ""
-    }
+    };
 
     setupHomePage(passedMovies) {
         const len = passedMovies.length;
-        let slideShowTimer = setInterval(this.next,5000);
+        let slideShowTimer = setInterval(this.next, 20000);
         this.setState({
             movies: passedMovies,
             frontPage: passedMovies[0],
-            midPageSlide: passedMovies.slice(1,len/2),
-            starPage: passedMovies.slice((len/2)+1,len),
+            midPageSlide: passedMovies.slice(1, len / 2),
+            starPage: passedMovies.slice((len / 2) + 1, len),
             timer: slideShowTimer
         })
     }
 
-    next = () => {
-        let newMidIndex;
-        let newStarIndex;
-        this.setState((prevState) => {
-            newMidIndex = (prevState.midIndex + 1) >= prevState.midPageSlide.length ? 0 : prevState.midIndex + 1;
-            newStarIndex = (prevState.starIndex + 1) >= prevState.starPage.length ? 0 : prevState.starIndex + 1;
-            return {
-                midIndex: newMidIndex,
-                starIndex: newStarIndex
-            }
-        })
+    getStarName(passedMovie) {
+        if(passedMovie === undefined)
+            console.log("PassedMovie was undefined");
+        let starList = passedMovie["stars"].split(",");
+        let starName = starList[0].split(":")[0];
+        return (starName);
     }
 
-    //new function for carousel
-    //maybe store length of array in state?
-    //use that length to carousel
+    getStarPath(passedMovie) {
+        let starList = passedMovie["stars"].split(",");
+        let starPath = starList[0].split(":")[1];
+        return (starPath);
+    }
+
+    getMidSlideShow = (passedMovie) => {
+        return (
+            <div key={passedMovie["movie_id"]} className="slide"
+                 style={{transform: "translateX(" + this.state.midX + "%)"}}>
+                <img src={basicMovieUrl + passedMovie["backdrop_path"]} alt=""/>
+                <div className="slideshow-info">
+                    <h1>{passedMovie["title"]}</h1>
+                    <p>
+                        {this.getStarName(passedMovie)} in {passedMovie["title"]}
+                        ({passedMovie["year"]})
+                    </p>
+                </div>
+            </div>
+        )
+    };
+
+    getStarSlideShow = (passedMovie) => {
+        return (
+            <div key={passedMovie["movie_id"]} className="slide"
+                 style={{transform: "translateX(" + this.state.starX + "%)"}}>
+                <img src={basicStarUrl + this.getStarPath(passedMovie)} alt=""/>
+                <div className="slideshow-info">
+                    <h1>{this.getStarName(passedMovie)}</h1>
+                    <p>
+                        {passedMovie["title"]}({passedMovie["year"]})
+                    </p>
+                </div>
+            </div>
+        )
+    };
+
+    goLeft = ({target}) => {
+        const {name} = target;
+        console.log(name);
+        this.state[name] === 0 ?
+            this.setState(() => {
+                if (name === "midX") {
+                    return {
+                        [name]: -100 * (this.state.midPageSlide.length - 1)
+                    }
+                } else {
+                    return {
+                        [name]: -100 * (this.state.starPage.length - 1)
+                    }
+                }
+            }) :
+            this.setState((prevState) => {
+                return {
+                    [name]: prevState[name] + 100
+                };
+            })
+    };
+
+    goRight = ({target}) => {
+        const {name} = target;
+        if (name === "midX") {
+            this.state[name] === -100 * (this.state.midPageSlide.length - 1) ?
+                this.setState({[name]: 0}) :
+                this.setState((prevState) => {
+                    return {
+                        [name]: prevState[name] - 100
+                    };
+                })
+        } else {
+            this.state[name] === -100 * (this.state.starPage.length - 1) ?
+                this.setState({[name]: 0}) :
+                this.setState((prevState) => {
+                    return {
+                        [name]: prevState[name] - 100
+                    };
+                })
+        }
+
+
+    };
+
+    //todo USE AXIOS CANCEL TOKEN TO END API CALLS WHEN NAVIGATION OCCURS
 
     componentDidMount() {
         //                            alert(homePageMovies.length);
-        console.log("It mounted");
-        const {firstVisit, handleFirstVisit} = this.props;
+        console.log("Home mounted");
+        const {handleFirstVisit} = this.props;
+        let firstVisit = JSON.parse(localStorage.getItem("firstVisit"));
 
+
+        let map = new Map();
+        map.set("t100", "forgiven");
+        map.set("t200", "jail");
+        map.set("t300", "land");
+        map.set("t100", "forgiven");
+        map.set("t400", "blue");
+        map.set("t500", "sun");
+        map.set("t300", "land");
+        console.log(map);
+
+
+        //500's caught by the .catch
+        //everything else handles by default
         if (firstVisit) {
             Movie.getRandomMovies()
                 .then(response => {
@@ -63,17 +162,21 @@ class Home extends Component {
                             handleFirstVisit(response);
                             break;
                         case 218:
-                            //idk yet
+                            console.log("In 218 switch of home page componentDidMount");
                             break;
                         default:
+                            console.log("In default of home page componentDidMount");
+                            this.props.handleLogOut();
                             break;
                     }
                 })
                 .catch(error => {
-                    httpErrorCheck(error);
+                    this.props.history.push("/servererror")
                 });
-        } else
-            this.setupHomePage(this.props.homePageMovies);
+        } else {
+            console.log("In the else of Home componentDidMount");
+            this.setupHomePage(JSON.parse(localStorage.getItem("movies")));
+        }
 
     }
 
@@ -83,35 +186,79 @@ class Home extends Component {
 
 
     render() {
-        const {frontPage, midPageSlide, midIndex, starPage, starIndex} = this.state;
+        const {movies, frontPage, midPageSlide, midX, starPage, starX} = this.state;
         return (
             <div className="wrapper">
+                {(movies.length === 0) && <h1>FETCHING YOUR HOME PAGE</h1>}
+                {(movies.length !== 0) &&
                 <div className="home-page">
                     <h1>Home</h1>
                     {frontPage &&
-                        <Fragment>
-                            <div className="thumbnail">
-                                <img src={basicMovieUrl + frontPage["backdrop_path"]} alt=""/>
+                    <Fragment>
+                        <div className="thumbnail">
+                            <img src={basicMovieUrl + frontPage["backdrop_path"]} alt=""/>
+                            <div className="movie-info">
                                 <p>
                                     {frontPage["title"]}({frontPage["year"]})
                                 </p>
+                                <p className="star">{this.getStarName(frontPage)}</p>
                             </div>
-                            <div className="thumbnail">
-                                <img src={basicMovieUrl + midPageSlide[midIndex]["backdrop_path"]} alt=""/>
-                                <p>{midPageSlide[midIndex]["title"]}</p>
-                                <div className="dot-container">
-                                    <span className="dot"></span>
-                                    <span className="dot"></span>
-                                    <span className="dot"></span>
-                                </div>
-                            </div>
-                            <div className="thumbnail">
-                                <img src={basicMovieUrl + starPage[starIndex]["backdrop_path"]} alt=""/>
-                                <p>{starPage[starIndex]["title"]}</p>
-                            </div>
-                        </Fragment>
+                        </div>
+                        <h1 id="in-theater">In Theater</h1>
+                        <div className="thumbnail-slider">
+                            {midPageSlide.map(this.getMidSlideShow)}
+                            <button id="go-left1" className="slide-button" onClick={this.goLeft} name="midX">
+                                <FontAwesomeIcon icon={faChevronLeft} size="2x"/>
+                            </button>
+                            <button id="go-right1" className="slide-button" onClick={this.goRight} name="midX">
+                                <FontAwesomeIcon icon={faChevronRight} size="2x"/>
+                            </button>
+                        </div>
+                        <h1 id="weekly-stars">Weekly Stars</h1>
+                        <div className="thumbnail-star-slider">
+                            {starPage.map(this.getStarSlideShow)}
+                            <button id="go-left2" className="slide-button" onClick={this.goLeft} name="starX">
+                                <FontAwesomeIcon icon={faChevronLeft} size="2x"/>
+                            </button>
+                            <button id="go-right2" className="slide-button" onClick={this.goRight} name="starX">
+                                <FontAwesomeIcon icon={faChevronRight} size="2x"/>
+                            </button>
+                        </div>
+
+                        {/*todo then work on search bar in navbar */}
+                        {/*todo then work on functionality of the search bar*/}
+                        {/*todo finish up bottom portion of the home page*/}
+
+
+                        {/*<div className="thumbnail-star">*/}
+                        {/*    <img src={basicStarUrl + this.getStarPath(starPage[starIndex])} alt=""/>*/}
+                        {/*    <p>{this.getStarName(starPage[starIndex])}</p>*/}
+                        {/*</div>*/}
+                    </Fragment>
                     }
-                </div>
+                    <div className="footer">
+                        <div className="quick-links">
+                            <Link to="/home">
+                                Home
+                            </Link>
+                            <Link to="/">
+                                About Fabflix
+                            </Link>
+                            <Link to="/register">
+                                Register an Account
+                            </Link>
+                            <Link to="/">
+                                Checkout
+                            </Link>
+                            <Link to="/">
+                                Privacy Policy
+                            </Link>
+                        </div>
+                        <div className="copyright">
+                            <p>Copyright <FontAwesomeIcon icon={faCopyright} /> 2020 by Luis(Lewis) Escobar. All rights reserved.</p>
+                        </div>
+                    </div>
+                </div>}
             </div>
         );
     }

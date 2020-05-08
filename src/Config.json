@@ -1,7 +1,11 @@
 {
   "baseUrl": "http://localhost:12345/api/g",
   "basicMovieUrl": "https://image.tmdb.org/t/p/w1280",
-  "pollLimit": 3000,
+  "basicThumbnailMovieUrl": "https://image.tmdb.org/t/p/w154",
+  "basicCartMovieUrl": "https://image.tmdb.org/t/p/w92",
+  "backdropMovieUrl": "https://image.tmdb.org/t/p/original",
+  "basicStarUrl": "https://image.tmdb.org/t/p/original",
+  "pollLimit": 70,
   "homePageGenre": "comedy",
   "homePageLimit": 10,
   "gatewayEPs": {
@@ -22,5 +26,15 @@
     "peopleMovieSearchEP": "/movies/people",
     "basicPeopleSearchEP": "/movies/people/search",
     "detailedPeopleSearchEP": "/movies/people/get/"
+  },
+  "billingEPs": {
+    "insertEP": "/billing/cart/insert",
+    "updateEP": "/billing/cart/update",
+    "deleteEP": "/billing/cart/delete",
+    "retrieveEP": "/billing/cart/retrieve",
+    "clearEP": "/billing/cart/clear",
+    "orderPlaceEP": "/billing/order/place",
+    "orderRetrieveEP": "/billing/order/retrieve",
+    "orderCompleteEP": "/billing/order/complete"
   }
 }

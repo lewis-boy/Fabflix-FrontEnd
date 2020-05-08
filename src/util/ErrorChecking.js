@@ -2,9 +2,9 @@
 
 export function httpErrorCheck(error){
     if(error.response)
-        alert("Out of 200 bound: ");
+        return new Error("Out of 200 bound: ");
     else if(error.request)
-        alert("No response was received");
+        return new Error("Connection Refusal for now");
     else
-        alert("500 error maybe... ");
+        return new Error("500 error maybe... ");
 }

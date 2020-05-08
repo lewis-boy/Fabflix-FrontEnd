@@ -1,16 +1,21 @@
 import React, {Component} from "react";
 
 import Idm from "../services/Idm";
+import {httpErrorCheck} from "../util/ErrorChecking";
+
+import {Link} from "react-router-dom";
+import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
+import {faExclamationTriangle} from "@fortawesome/free-solid-svg-icons";
 
 import "../css/common.css";
+import "../css/login.css";
 
 
 class Register extends Component {
     state = {
         email: "",
         password: "",
-        emailError: "",
-        passwordError: ""
+        errorMessage: ""
     };
 
     handleSubmit = e => {
@@ -21,22 +26,16 @@ class Register extends Component {
         //todo on .then split into two routes based on response: correct login vs incorrect login
         Idm.register(email, password)
             .then(response => {
-                alert(JSON.stringify(response.data,null,4));
+                console.log(JSON.stringify(response.data,null,4));
                 switch(response["data"]["resultCode"]){
                     case -12:
-                    case 12:
-                    case 13:
-                        this.setState({
-                            emailError: "",
-                            passwordError: response["data"]["message"]
-                        });
-                        break;
                     case -11:
                     case -10:
+                    case 12:
+                    case 13:
                     case 16:
                         this.setState({
-                            emailError: response["data"]["message"],
-                            passwordError: ""
+                            errorMessage: response["data"]["message"]
                         });
                         break;
                     case 110:
@@ -46,14 +45,8 @@ class Register extends Component {
                 }
             })
             .catch(error => {
-                if(error.response)
-                    alert("Out of 200 bound: ");
-                else if(error.request)
-                    alert("No response was recieved")
-                else
-                    alert("500 error maybe... ")
+                httpErrorCheck(error);
             });
-        //todo maybe make catch do some javascript
     };
 
     updateField = ({target}) => {
@@ -69,6 +62,12 @@ class Register extends Component {
         return (
             <div>
                 <h1>Register</h1>
+                {this.state.errorMessage &&
+                <div className="error-message">
+                    <FontAwesomeIcon icon={faExclamationTriangle} size="2x"/>
+                    <p>{this.state.errorMessage}</p>
+                </div>
+                }
                 <form onSubmit={this.handleSubmit}>
                     <label className="label">Email</label>
                     <input
@@ -79,7 +78,6 @@ class Register extends Component {
                         value={email}
                         onChange={this.updateField}
                     ></input>
-                    {this.state.emailError && <small className="loginRegisterError">{this.state.emailError}</small>}
                     <label className="label">Password</label>
                     <input
                         className="input"
@@ -89,8 +87,8 @@ class Register extends Component {
                         value={password}
                         onChange={this.updateField}
                     ></input>
-                    {this.state.passwordError && <small className="loginRegisterError">{this.state.passwordError}</small>}
                     <button className="button">Register</button>
+                    <p>Have an account already? Log in <Link to="/login">here</Link>.</p>
                 </form>
             </div>
         );

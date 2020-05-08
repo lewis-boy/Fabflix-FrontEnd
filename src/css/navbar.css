@@ -1,0 +1,214 @@
+
+.fa-search path {
+    color: red;
+}
+
+.fa-filter path {
+    color: red;
+}
+
+.fa-shopping-cart path {
+    color: white;
+}
+
+.fa-layer-group path {
+    color: white;
+}
+
+.fa-filter {
+    padding-right: 5px;
+}
+
+.fa-search {
+    padding-left: 5px;
+}
+
+/*todo make the layer-group a button and make the shopping cart a nav link*/
+.fa-shopping-cart {
+    padding-right: 5px;
+    padding-left: 5px;
+}
+
+.right-nav-buttons button {
+    font-size: 20px;
+    font-weight: bold;
+    padding-left: 20px;
+    padding-right: 20px;
+    letter-spacing: -1.4px;
+    word-spacing: -2.5px;
+}
+
+.navbar-button{
+    border: none;
+    outline: none;
+    background-color: black;
+}
+
+.mid-nav-buttons button:hover{
+    cursor: pointer;
+}
+
+.left-nav-buttons a {
+    font-size: medium;
+    font-weight: bold;
+    padding-left: 20px;
+    padding-right: 20px;
+}
+
+.left-nav-buttons a{
+    background-color: black;
+}
+
+
+.searchBar {
+    width: 180px;
+    height: 28px;
+    border-radius: 4px;
+    border: 2px solid rgb(100, 100, 100);
+}
+
+.searchBar[type='search'] {
+    color: white;
+    background-color: black;
+    letter-spacing: -0.4px;
+    font-family: sans-serif;
+    font-size: medium;
+    padding-left: 10px;
+    padding-right: 3px;
+}
+
+.searchBar::placeholder {
+    color: grey;
+}
+
+.filter-modal{
+    display: flex;
+    flex-direction: column;
+    opacity: 1;
+    transition: opacity 0.5s, transform 0.5s;
+    position: absolute;
+    z-index: 1;
+    top: 0%;
+    left: 33%;
+    width: 33vw;
+    height: 50vh;
+    background-color: white;
+    border-radius: 5px;
+}
+
+.extra-filters{
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    align-items: center;
+    opacity: 1;
+    position: absolute;
+    z-index: 1;
+    top: 95%;
+    left: 80%;
+    width: 15vw;
+    height: 60vh;
+    background: black;
+    border-radius: 5px;
+    border: 2px grey solid;
+}
+
+.extra-filters .exit-button{
+    margin: 5px;
+    background-color: black;
+    border: none;
+    outline: none;
+}
+
+.extra-filters .submit-button{
+    font-size: medium;
+    background-color: dodgerblue;
+    width: 30%;
+    padding: 8px;
+    margin: 10px;
+    border: none;
+    outline: none;
+    border-radius: 5px;
+    color: white;
+}
+
+
+.extra-filters .fa-times-circle path{
+    color: red;
+}
+
+.hide{
+    z-index: -1;
+    opacity: 0;
+}
+
+.modal-footer,
+.modal-header{
+    display: flex;
+    justify-content: space-between;
+    padding-top: 10px;
+    padding-bottom: 10px;
+    padding-left: 10px;
+}
+
+.modal-header button{
+    background-color: white;
+    padding-right: 10px;
+    border: none;
+    outline: none;
+}
+
+.modal-footer h1,
+.modal-header h1{
+    letter-spacing: -1.4px;
+    color: black;
+    font-size: x-large;
+}
+
+
+.modal-header button:hover{
+    cursor: pointer;
+}
+
+.filter-titles,
+.filter-genres{
+    display: flex;
+    flex-wrap: wrap;
+    padding: 10px;
+}
+
+.filter-titles .number-titles{
+    margin-bottom: 6px;
+}
+
+.filter-titles .letter-titles{
+    display: flex;
+    flex-wrap: wrap;
+}
+
+.filter-genres a{
+    font-size: medium;
+    text-decoration: none;
+    color: dodgerblue;
+    background-color: white;
+    padding: 7px;
+    letter-spacing: -0.5px;
+}
+
+.filter-titles .number-titles a,
+.filter-titles .letter-titles a{
+    font-size: medium;
+    text-decoration: none;
+    color: dodgerblue;
+    background-color: white;
+    padding: 10px;
+}
+
+.filter-titles .number-titles a:hover,
+.filter-titles .letter-titles a:hover,
+.filter-genres a:hover{
+    text-decoration: underline;
+}
+
+
+

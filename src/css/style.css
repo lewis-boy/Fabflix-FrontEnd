@@ -3,13 +3,27 @@
   font-size: 25px;
   color: var(--detail-font-color);
   text-decoration: none;
+  background-color: black;
 }
+
+
+/*.home-link{*/
+/*  position: absolute;*/
+/*  left: 5%;*/
+/*  top: 20%*/
+/*}*/
+
+/*.left-link{*/
+/*  position: absolute;*/
+/*  left: 12%;*/
+/*  top: 20%*/
+/*}*/
 
 .nav-button {
   padding: 10px;
   font-size: 25px;
   color: var(--detail-font-color);
-  background: var(--detail-color);
+  background: black;
   border-style: none;
   text-decoration: none;
 }

@@ -39,3 +39,42 @@
 .loginRegisterError{
   color: red;
 }
+
+.filterbar-container{
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 10px;
+}
+
+.filterbar-container a{
+  color: whitesmoke;
+}
+
+.filterbar-container a:not(:last-child){
+  border-right: 2px solid grey;
+  padding: 2px;
+}
+
+.filterbar-container a:last-child{
+  border-right: 2px solid white;
+  padding: 1px;
+  margin: 1px;
+}
+
+.fa-angle-down path{
+  color: lime;
+}
+
+.fa-angle-up path{
+  color: red;
+}
+
+.fa-chevron-left path{
+  color: white
+}
+
+.fa-chevron-right path{
+  color: white;
+}
+

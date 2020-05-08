@@ -1,34 +1,131 @@
-h1{
+h1 {
     text-align: center;
 }
-.wrapper{
-    width: auto;
+
+.wrapper {
+    width: 100%;
+    height: 100%;
     margin: 0 0;
+    padding: 0;
 }
 
-.wrapper .home-page{
-    display:flex;
+.wrapper .home-page {
+    width: 100%;
+    height: 100%;
+    margin: 0 0;
+    padding: 0;
+    display: flex;
     flex-direction: column;
+    align-items: center;
+    justify-content: center;
 }
 
-.wrapper .home-page .thumbnail{
+.wrapper .home-page h1 {
+    color: whitesmoke;
+}
+
+.wrapper .home-page .thumbnail-slider{
+     display: flex;
     position: relative;
-    width: calc(100vw - 50px);
+    height: 100%;
+    width: calc(100vw - 400px);
+    overflow: hidden;
+    margin-bottom: 50px;
+ }
+
+.wrapper .home-page .thumbnail-star-slider{
+    display: flex;
+    position: relative;
+    height: calc(100vh - 100px);
+    width: calc(100vw - 400px);
+    overflow: hidden;
+    margin-bottom: 50px;
+}
+
+.wrapper .home-page .thumbnail-slider .slideshow-info {
+    position: absolute;
+    top: 86%;
+    left: 30%;
+    color: navajowhite;
+    -webkit-text-stroke: 1px black;
+    -webkit-text-fill-color: white;
+    letter-spacing: -1.4px;
+}
+
+.wrapper .home-page .thumbnail-star-slider .slideshow-info{
+    position: absolute;
+    top: 90%;
+    left: 13%;
+    color: navajowhite;
+    -webkit-text-stroke: 1px black;
+    -webkit-text-fill-color: white;
+    letter-spacing: -1.4px;
+}
+
+.wrapper .home-page .thumbnail-slider .slideshow-info p{
+    font-size: x-large;
+    font-weight: bold;
+}
+
+.wrapper .home-page .thumbnail-star-slider .slideshow-info p{
+
+    font-size: x-large;
+    font-weight: bold;
+}
+
+.wrapper .home-page .thumbnail-slider .slide{
+    position:relative;
+    min-width: 100%;
+    height: auto;
+    transition: .5s;
+    overflow: hidden;
+}
+
+.wrapper .home-page .thumbnail-star-slider .slide{
+    position:relative;
+    left: 25%;
+    min-width: 100%;
+    height: auto;
+    transition: .5s;
+    overflow: hidden;
+}
+
+.wrapper .home-page .thumbnail-slider .slide img{
+     width: 100%;
+ }
+
+.wrapper .home-page .thumbnail-star-slider .slide img{
+    width: 50%;
     height: 100%;
 }
 
-.wrapper .home-page .thumbnail img{
+.wrapper .home-page .thumbnail {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    position: relative;
     width: 100%;
     height: 100%;
 }
 
-.wrapper .home-page .thumbnail p{
+.wrapper .home-page h1 {
+    place-self: self-end;
+}
+
+.wrapper .home-page .thumbnail img {
+    width: 80%;
+    height: 80%;
+    transition: 0.5s;
+}
+
+.wrapper .home-page .thumbnail p {
     text-align: center;
     font-family: "Lucida Sans Unicode", "Lucida Grande", sans-serif;
     font-size: 22px;
     letter-spacing: -1.4px;
     word-spacing: 0px;
-    color: #000000;
+    color: navajowhite;
     font-weight: 400;
     text-decoration: none;
     font-style: normal;
@@ -36,27 +133,164 @@ h1{
     text-transform: none;
 }
 
-.wrapper .home-page .thumbnail .dot-container {
-    position: absolute;
-    top: 0;
-    left: 0;
-    padding: 10px;
-    background: #ddd;
+.wrapper .home-page .thumbnail .star {
+    font-style: italic;
 }
 
-/* The dots/bullets/indicators */
-.dot {
-    cursor: pointer;
-    height: 15px;
-    width: 15px;
-    margin: 0 2px;
-    background-color: #bbb;
-    border-radius: 50%;
-    display: inline-block;
-    transition: background-color 0.6s ease;
+
+
+.wrapper .home-page .thumbnail .movie-info {
+    margin: 10px;
+    padding: 5px;
 }
+
+
+.wrapper .home-page .thumbnail-star {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    position: relative;
+    width: 100%;
+    height: 100%;
+}
+
+/*.wrapper .home-page .thumbnail .dot-container {*/
+/*    position: absolute;*/
+/*    top: 0;*/
+/*    left: 0;*/
+/*    background: #ddd;*/
+/*}*/
+
+/*!* The dots/bullets/indicators *!*/
+/*.dot {*/
+/*    cursor: pointer;*/
+/*    height: 15px;*/
+/*    width: 15px;*/
+/*    margin: 0 2px;*/
+/*    background-color: #bbb;*/
+/*    border-radius: 50%;*/
+/*    display: inline-block;*/
+/*    transition: background-color 0.6s ease;*/
+/*}*/
 
 /* Add a background color to the active dot/circle */
-.active, .dot:hover {
-    background-color: #717171;
+/*.active, .dot:hover {*/
+/*    background-color: #717171;*/
+/*}*/
+
+.slide-button{
+    color: white;
+    position: absolute;
+    height: 640px;
+    width: 100px;
+    background: rgba(0, 0, 0, 0.0);
+    outline: none;
+    transition: .5s;
 }
+
+.slide-button:hover{
+    background-color: rgba(0,0,0,0.5);
+    cursor: pointer;
+}
+
+
+#go-left1 {
+    border-color: yellow;
+    position: absolute;
+    left: 0%;
+    top: 0%;
+}
+
+#go-right1 {
+    border-color: yellow;
+    left: 91%;
+    top: 0%;
+    transform: translateX(2px);
+}
+
+#go-left2 {
+    height: 664px;
+    width: 283px;
+    border-color: deepskyblue;
+    position: absolute;
+    left: 0%;
+    top: 0%;
+}
+#go-left2:hover{
+    background-color: rgba(255,255,255,0.5);
+}
+
+#go-right2 {
+    height: 664px;
+    width: 283px;
+    border-color: deepskyblue;
+    left: 91%;
+    top: 0%;
+    position: absolute;
+    transform: translateX(-182px);
+}
+
+#go-right2:hover{
+    background-color: rgba(255,255,255,0.5);
+}
+
+#in-theater{
+    transform: translateX(230px);
+    padding: 5px;
+}
+
+#weekly-stars{
+    padding: 5px;
+    transform: translateX(645px);
+}
+
+.footer{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    background-color: black;
+    width: 100%;
+    border-top: 2px solid white;
+    padding-top: 10px;
+    padding-bottom: 10px;
+}
+
+.footer .quick-links{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.footer .quick-links a{
+    font-size: small;
+    color: whitesmoke;
+    text-decoration: none;
+}
+
+.footer .quick-links a:hover{
+    text-decoration: underline;
+}
+
+.footer .quick-links a:not(:last-child){
+    border-right: 1px solid white;
+    padding-right: 3px;
+    padding-left: 3px;
+}
+
+.footer .quick-links a:last-child{
+    padding-left: 3px;
+}
+
+.footer .copyright p{
+    font-size: small;
+    color: white;
+}
+
+.fa-copyright path{
+    color: white;
+}
+
+
+

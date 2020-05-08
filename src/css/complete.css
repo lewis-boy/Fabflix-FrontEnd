@@ -1,0 +1,20 @@
+.fa-shopping-cart path{
+    color: white
+}
+
+.complete-content{
+    width: 100%;
+    min-height: calc(100vh - 45px);
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+.complete-content p{
+    margin: 10px 0 10px 0;
+    font-size: 60px;
+    font-weight: bolder;
+    color: white;
+    font-family: sans-serif;
+}

@@ -1,0 +1,48 @@
+.history-gallery *{
+    color: whitesmoke;
+}
+
+.history-gallery{
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+.page-title{
+    color: whitesmoke;
+    margin: 20px 0 20px 0;
+}
+
+.entire-transaction-holder{
+    display: flex;
+    background-color: #4d4d4d;
+    width: 80%;
+    margin: 20px;
+    padding: 30px;
+}
+
+.entire-transaction-holder .transaction-info-holder{
+    display: flex;
+    flex-direction: column;
+    border-right: 3px solid whitesmoke;
+    justify-content: space-between;
+    margin-right: 30px;
+    padding-right: 30px;
+}
+
+.entire-transaction-holder .history-movie-gallery{
+    display: flex;
+}
+
+.entire-transaction-holder .history-movie-gallery .movie-item{
+    display: flex;
+    padding: 15px;
+    margin-right: 5px;
+    align-items: center;
+}
+
+.entire-transaction-holder .history-movie-gallery .movie-item img{
+    margin-right: 5px;
+    border: 4px red solid;
+    border-radius: 5px;
+}
