@@ -6,6 +6,7 @@ import ClipLoader from "react-spinners/ClipLoader";
 
 import "../css/navbar.css";
 import "../css/cart.css";
+import "../css/universal.css";
 import {faTrashAlt} from "@fortawesome/free-solid-svg-icons";
 import {basicCartMovieUrl} from "../Config";
 
@@ -13,86 +14,125 @@ import {basicCartMovieUrl} from "../Config";
 class Cart extends Component {
     state = {
         cartMovies: [],
-        cartError: "",
-        cartTotal: 0
+        rawCartMovies:[],
+        cartMessage: "",
+        isMounted: false,
+        movieIds: []
     };
 
-    handleCartResponse = (response) => {
+    handleCartRetrieveResponse = (response) => {
         switch (response["data"]["resultCode"]) {
             case 312:
+            case 3150:
                 this.setState({cartMovies: []});
                 break;
             case 3130:
                 this.updateCartMovies(response);
                 break;
             default:
-                this.setState({cartError: "Operation could be fulfilled"});
+                this.setState({cartError: "BadRequest Error"});
                 break;
         }
     };
 
-    handleDeleteResponse = (response) => {
+    handleDeleteResponse = (response, movie_id) => {
         switch (response["data"]["resultCode"]) {
             case 312:
-                this.setState({cartError: "Error occurred when trying to delete movie. Does not exist"});
+            case 3150:
+                this.setState({cartError: response["data"]["message"]});
                 break;
             case 3120:
+                this.setState((prevState) => {
+                    return {
+                        cartMovies: prevState.cartMovies.filter(item => item.key === movie_id)
+                    };
+                });
                 this.props.history.push("billing/cart/delete");
                 break;
             default:
-                this.setState({cartError: "Operation could be fulfilled"});
+                this.setState({cartError: "BadRequest Error"});
                 break;
         }
     };
 
-    handleUpdateResponse = (response) => {
+    handleUpdateResponse = (response, movie_id, quantity) => {
         switch (response["data"]["resultCode"]) {
+            case 33:
             case 312:
-                this.setState({cartError: "Could not update cart due to non-existant"});
+            case 3150:
+                this.setState({cartError: response["data"]["message"]});
                 break;
-            case 3120:
-                this.props.history.push("billing/cart/update");
+            case 3110:
+                console.log(this.state);
+                this.setState((prevState) => {
+                    return {
+                        [movie_id]: quantity
+                    }
+                });
+                console.log(this.state);
                 break;
             default:
-                this.setState({cartError: "Operation could be fulfilled"});
+                this.setState({cartError: "BadRequest Error"});
                 break;
         }
     };
 
     handleOrderPlaceResponse = (response) => {
-        switch(response["data"]["resultCode"]){
+        switch (response["data"]["resultCode"]) {
             case 3400:
-                console.log("test 1")
+                //console.log("test 1");
                 window.location.assign(response["data"]["approve_url"]);
-                console.log("bonus test")
+                //console.log("bonus test");
                 break;
             default:
+                this.setState({cartError: "BadRequest Error"});
+                break;
+        }
+    };
+
+    handleClearCartResponse = (response) => {
+        switch (response["data"]["resultCode"]) {
+            case 312:
+            case 3150:
+                this.setState({cartError: response["data"]["message"]});
+                break;
+            case 3140:
+                this.setState({
+                    cartMovies: [],
+                    cartMessage: "Your Cart is Empty"
+                });
+                break;
+            default:
+                this.setState({cartError: "BadRequest Error"});
                 break;
         }
     };
 
     updateCartMovies = (response) => {
         //update this.state.cartMovies and wrap mapping in a gallery wrapper
-        let mappedCart;
-        mappedCart = <div className="cart-gallery">{response["data"]["items"].map(this.createCartItem)}</div>
-        this.setState({
-            cartMovies: mappedCart
+        let mappedIds;
+        mappedIds = response["data"]["items"].map( item => item["movie_id"]);
+
+        response["data"]["items"].forEach( (item) => {
+            this.setState({
+                    [item["movie_id"]]: item["quantity"],
+                    [item["movie_id"] + "Price"]: item["unit_price"]});
         });
+        this.setState({
+            rawCartMovies: response["data"]["items"],
+            movieIds: mappedIds
+        });
+        //console.log(this.state);
     };
 
     createCartItem = (item) => {
         //create one cart item and use this for mapping
-        let stateName = item["movie_title"];
         let unit_price = item["unit_price"];
         let quantity = item["quantity"];
-        let subTotal = unit_price * quantity;
-        this.setState((prevState) => {
-            return {
-                cartTotal: prevState.cartTotal + subTotal
-            };
-        });
+        let movie_id = item["movie_id"];
+
         return (
-            <div className="item-wrapper">
+            <div className="item-wrapper" key={movie_id}>
                 <div className="movie-poster-holder">
                     <img src={basicCartMovieUrl + item.poster_path} alt=""/>
                     <p>{item["movie_title"]}</p>
@@ -100,26 +140,30 @@ class Cart extends Component {
                 <div className="editing-holder">
                     <div className="quantity-editing-holder">
                         <span className="cart-info-span">${unit_price}</span>
-                        <div >
+                        <div className="flex-column">
                             <input
                                 size="2"
-                                maxLength="2"
+                                maxLength="3"
                                 className="quantity-bar"
                                 type="search"
-                                name={stateName}
-                                value={quantity}
-                                onChange={this.updateField}>
+                                name={movie_id}
+                                defaultValue={quantity}
+                                onChange={this.updateField}
+                            >
                             </input>
                             <button className="update-button"
                                     onClick={() => {
-                                        this.handleUpdateClick(stateName)
+                                        this.handleUpdateClick(movie_id)
                                     }}>Update
                             </button>
+                            <div className={"update-message" + (this.state[movie_id + "-changed"] ? " hide" : "")}>
+                                Your cart has been updated!
+                            </div>
                         </div>
-                        <span className="cart-info-span">${subTotal}</span>
+                        <span className="cart-info-span">${(this.state[movie_id + "Price"] * this.state[movie_id])}</span>
                         <button className="trash-button"
                                 onClick={() => {
-                                    this.handleRemoveClick(stateName)
+                                    this.handleRemoveClick(movie_id)
                                 }}>
                             <FontAwesomeIcon icon={faTrashAlt} size="lg"/>
                         </button>
@@ -133,36 +177,29 @@ class Cart extends Component {
 
     updateField = ({target}) => {
         const {name, value} = target;
-        this.setState({[name]: value});
+        this.setState({
+            [name]: value
+        });
     };
 
-    handleUpdateClick = (stateName) => {
-        //might be an implicit delete, so send over movie_id, email, and quantity
-        if (this.state[stateName] === "" || this.state[stateName] === 0) {
-            Billing.cartDelete(localStorage.getItem("email"), stateName)
-                .then(response => {
-                    this.handleDeleteResponse(response)
-                })
-                .catch(error => {
-                    this.props.history.push("/servererror")
-                })
-        } else if (this.state[stateName] > 0) {
-            Billing.cartUpdate(localStorage.getItem("email"), stateName, this.state[stateName])
-                .then(response => {
-                    this.handleUpdateResponse(response);
-                })
-                .catch(error => {
-                    this.props.history.push("/servererror")
-                })
-        } else {
-            console.log("Something weird happened in handleUpdateClick\n" + "this.state[statename]: " + this.state[stateName]);
-        }
+    handleUpdateClick = (movie_id) => {
+        let quantity = this.state[movie_id];
+        // console.log("Movie id: " + movie_id);
+        // console.log("Quantity: " + quantity);
+        //Nevermind, quantity must be greater than 0, which means just display error message
+        Billing.cartUpdate(localStorage.getItem("email"), movie_id, quantity)
+            .then(response => {
+                this.handleUpdateResponse(response, movie_id, quantity);
+            })
+            .catch(error => {
+                this.props.history.push("/servererror")
+            })
     };
 
     //stateName = itemName
-    handleRemoveClick = (stateName) => {
+    handleRemoveClick = (movie_id) => {
         //send over movie_id and email
-        Billing.cartDelete(localStorage.getItem("email"), stateName)
+        Billing.cartDelete(localStorage.getItem("email"), movie_id)
             .then(response => {
                 this.handleDeleteResponse(response);
             })
@@ -171,43 +208,73 @@ class Cart extends Component {
             })
     };
 
+    handleClearCLick = () => {
+        Billing.cartClear(localStorage.getItem("email"))
+            .then(response => {
+                this.handleClearCartResponse(response);
+            })
+            .catch(error => {
+                this.props.history.push("/servererror")
+            })
+    };
+
     handleCheckoutClick = () => {
         Billing.orderPlace(localStorage.getItem("email"))
-            .then( response => {
+            .then(response => {
                 this.handleOrderPlaceResponse(response);
             })
-            .catch( error => {
+            .catch(error => {
                     this.props.history.push("/servererror")
                 }
             )
     };
 
     componentDidMount() {
+        console.log("Cart Mounted");
         Billing.cartRetrieve(localStorage.getItem("email"))
             .then(response => {
-                this.handleCartResponse(response);
+                this.handleCartRetrieveResponse(response);
+                this.setState({
+                    isMounted: true
+                })
             })
             .catch(error => {
+                console.log(error);
                 this.props.history.push("/servererror")
             })
     }
 
     render() {
-        //TODO abandon the fixed div and follow kelloggs version on the side
 
-        const {cartMovies, cartTotal} = this.state;
+        const {rawCartMovies, cartMessage, isMounted} = this.state;
+        let cartTotal = 0;
+        this.state["movieIds"].forEach( (movie_id) => {
+            cartTotal += this.state[movie_id + "Price"] * this.state[movie_id];
+        });
+
         return (
             <div className="wrapper">
-                {(cartMovies.length === 0) &&
+                {(rawCartMovies.length === 0) && (!isMounted) &&
                 <Fragment><h1>FETCHING YOUR CART</h1>
                     <ClipLoader
                         size={130}
                         color={"#FF0000"}
-                        loading={cartMovies.length === 0}
+                        loading={rawCartMovies.length === 0}
                     />
                 </Fragment>}
-                {(cartMovies.length !== 0) &&
-                //TODO add buttons below cartMovies map
+
+                {/*//todo handle error messages here*/}
+                {(rawCartMovies.length === 0) && (isMounted) &&
+                <Fragment>
+                    <h1>{cartMessage}</h1>
+                    <div className="footer-buttons">
+                        <button className="continue-button" onClick={this.props.history.goBack}>Continue Shopping
+                        </button>
+                    </div>
+                </Fragment>}
+
+
+                {(rawCartMovies.length !== 0) &&
                 <Fragment>
                     <div className="flex">
                         <span className="shopping-cart-title">Shopping Cart</span>
@@ -217,8 +284,16 @@ class Cart extends Component {
                         <span className="qty">Qty</span>
                         <span className="subtotal">Subtotal</span>
                     </div>
-                    <div className="main-content">
-                        {cartMovies}
+                    <div className="main-content" onClick={console.log(this.state)}>
+                        <div className="left-side">
+                            <div className="cart-gallery">{rawCartMovies.map(this.createCartItem)}</div>;
+                            <div className="footer-buttons">
+                                <button className="clear-button" onClick={this.handleClearCLick}>Clear Cart</button>
+                                <button className="continue-button" onClick={this.props.history.goBack}>Continue
+                                    Shopping
+                                </button>
+                            </div>
+                        </div>
                         <div className="checkout-box">
                             <div className="group">
                                 <h3 className="field">Redeem or Coupon Code</h3>
@@ -244,7 +319,8 @@ class Cart extends Component {
                                     <h2>${cartTotal.toFixed(2)}</h2>
                                 </div>
                             </div>
-                            <button className="checkout-button" onClick={this.handleCheckoutClick}>Proceed to Checkout</button>
+                            <button className="checkout-button" onClick={this.handleCheckoutClick}>Proceed to Checkout
+                            </button>
                         </div>
                     </div>
                 </Fragment>}

@@ -83,7 +83,8 @@
     flex-direction: column;
     align-items: flex-start;
     padding: 5px;
-    /*width: 80%;*/
+    max-width: 980px;
+    min-width: 980px;
 }
 
 .movie-poster-holder{
@@ -112,6 +113,8 @@
 }
 
 .cart-info-span{
+    max-width: 80px;
+    min-width: 80px;
     color: whitesmoke;
     letter-spacing: -0.4px;
     font-family: "Bookman Old Style";
@@ -134,7 +137,12 @@
     color: rgb(208,0,0);
 }
 
+.fa-trash-alt:hover path {
+    color: darkred;
+}
+
 .update-button{
+    max-width: 70px;
     border: 2px white solid;
     outline: none;
     background-color: rgb(208,0,0);
@@ -148,6 +156,21 @@
 .update-button:hover{
     background-color: red;
     cursor: pointer;
+}
+
+.update-message{
+    display: flex;
+    visibility: visible;
+    opacity: 1;
+    margin-top: 10px;
+    font-weight: bold;
+    color: whitesmoke;
+    max-width: 80px;
+}
+
+.hide{
+    visibility: hidden;
+    opacity: 0;
 }
 
 .checkout-box{
@@ -212,3 +235,45 @@
     background-color: whitesmoke;
     cursor: pointer;
 }
+
+
+/*//TODO make a footers css but when the cart is empty*/
+.footer-buttons{
+    width: inherit;
+    display: flex;
+    justify-content: space-between;
+    margin-right: 135px;
+}
+
+.footer-buttons .clear-button{
+    justify-self: start;
+    color: whitesmoke;
+    font-weight: bold;
+    background-color: rgb(208,0,0);
+    /*transition: background-color 0.6s ease;*/
+    border: 4px white solid;
+    border-radius: 18px;
+    padding: 5px 15px 5px 15px;
+}
+
+.footer-buttons .clear-button:hover{
+    background-color: red;
+    cursor: pointer;
+}
+
+.footer-buttons .continue-button{
+    color: black;
+    font-weight: bold;
+    background-color: white;
+    transition: background-color 0.6s ease;
+    border: 4px black solid;
+    border-radius: 18px;
+    padding: 5px 15px 5px 15px;
+}
+
+.footer-buttons .continue-button:hover{
+    color: white;
+    background-color: black;
+    cursor: pointer;
+}
+
