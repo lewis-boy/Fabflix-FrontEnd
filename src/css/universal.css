@@ -1,14 +1,15 @@
-.error-message{
+.basic-error-message{
+    width: 100%;
     display: flex;
     align-items: center;
     justify-content: center;
-    padding: 4px;
+    padding: 10px 0 10px 0;
     background-color: rgba(255,0,0,0.8);
-}
-
-.error-message p{
-    color: navajowhite;
-    font-weight: bolder;
+    color: whitesmoke;
+    font-weight: bold;
+    font-family: Georgia;
+    margin-top: 15px;
+    opacity: 0.9;
 }
 
 .flex-column{

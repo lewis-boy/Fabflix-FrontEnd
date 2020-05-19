@@ -13,9 +13,8 @@ import {basicCartMovieUrl} from "../Config";
 
 class Cart extends Component {
     state = {
-        cartMovies: [],
         rawCartMovies:[],
-        cartMessage: "",
+        cartError: "",
         isMounted: false,
         movieIds: []
     };
@@ -24,7 +23,7 @@ class Cart extends Component {
         switch (response["data"]["resultCode"]) {
             case 312:
             case 3150:
-                this.setState({cartMovies: []});
+                this.setState({rawCartMovies: []});
                 break;
             case 3130:
                 this.updateCartMovies(response);
@@ -44,10 +43,9 @@ class Cart extends Component {
             case 3120:
                 this.setState((prevState) => {
                     return {
-                        cartMovies: prevState.cartMovies.filter(item => item.key === movie_id)
+                        rawCartMovies: prevState.rawCartMovies.filter(item => item.movie_id !== movie_id)
                     };
                 });
-                this.props.history.push("billing/cart/delete");
                 break;
             default:
                 this.setState({cartError: "BadRequest Error"});
@@ -66,7 +64,8 @@ class Cart extends Component {
                 console.log(this.state);
                 this.setState((prevState) => {
                     return {
-                        [movie_id]: quantity
+                        [movie_id]: quantity,
+                        [movie_id + "Changed"]: true
                     }
                 });
                 console.log(this.state);
@@ -98,7 +97,7 @@ class Cart extends Component {
                 break;
             case 3140:
                 this.setState({
-                    cartMovies: [],
+                    rawCartMovies: [],
                     cartMessage: "Your Cart is Empty"
                 });
                 break;
@@ -156,7 +155,7 @@ class Cart extends Component {
                                         this.handleUpdateClick(movie_id)
                                     }}>Update
                             </button>
-                            <div className={"update-message" + (this.state[movie_id + "-changed"] ? " hide" : "")}>
+                            <div className={"update-message" + (this.state[movie_id + "Changed"] ? "" : " hide")}>
                                 Your cart has been updated!
                             </div>
                         </div>
@@ -178,7 +177,9 @@ class Cart extends Component {
     updateField = ({target}) => {
         const {name, value} = target;
         this.setState({
-            [name]: value
+            [name]: value,
+            [name + "Changed"]: false,
+            cartError: ""
         });
     };
 
@@ -201,7 +202,7 @@ class Cart extends Component {
         //send over movie_id and email
         Billing.cartDelete(localStorage.getItem("email"), movie_id)
             .then(response => {
-                this.handleDeleteResponse(response);
+                this.handleDeleteResponse(response, movie_id);
             })
             .catch(error => {
                 this.props.history.push("/servererror")
@@ -246,8 +247,9 @@ class Cart extends Component {
 
     render() {
 
-        const {rawCartMovies, cartMessage, isMounted} = this.state;
+        const {rawCartMovies, cartError, isMounted} = this.state;
         let cartTotal = 0;
+        let errorHide = cartError ? "" : " hide";
         this.state["movieIds"].forEach( (movie_id) => {
             cartTotal += this.state[movie_id + "Price"] * this.state[movie_id];
         });
@@ -266,7 +268,7 @@ class Cart extends Component {
                 {/*//todo handle error messages here*/}
                 {(rawCartMovies.length === 0) && (isMounted) &&
                 <Fragment>
-                    <h1>{cartMessage}</h1>
+                    <h1>{cartError}</h1>
                     <div className="footer-buttons">
                         <button className="continue-button" onClick={this.props.history.goBack}>Continue Shopping
                         </button>
@@ -276,6 +278,9 @@ class Cart extends Component {
 
                 {(rawCartMovies.length !== 0) &&
                 <Fragment>
+                    <div className={"basic-error-message" + errorHide}>
+                        {cartError}
+                    </div>
                     <div className="flex">
                         <span className="shopping-cart-title">Shopping Cart</span>
                     </div>
