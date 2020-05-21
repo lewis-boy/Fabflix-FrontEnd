@@ -1,0 +1,35 @@
+.wrapper{
+    width: 100%;
+}
+
+.people-gallery{
+    align-items: center;
+    width: 100%;
+    padding: 30px;
+}
+
+.person-wrapper{
+    background-color: #4d4d4d;
+    width: 80%;
+    height: 100%;
+    margin-bottom: 10px;
+    margin-top: 10px;
+    padding: 10px;
+    border-radius: 5px;
+}
+
+.row{
+    margin: 20px 0 20px 0;
+    display: flex;
+    align-items: center;
+}
+
+
+.row h4{
+    color: whitesmoke;
+}
+
+.row h3{
+    margin-right: 5px;
+    color: whitesmoke;
+}

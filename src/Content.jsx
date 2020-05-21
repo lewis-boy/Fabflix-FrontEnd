@@ -11,6 +11,7 @@ import ServerErrorPage from "./pages/ServerErrorPage";
 import Complete from "./pages/Complete";
 import OneMovie from "./pages/OneMovie";
 import OrderHistory from "./pages/OrderHistory";
+import People from "./pages/People";
 
 import "./css/index.css";
 
@@ -62,6 +63,8 @@ class Content extends Component {
                     <Route path="/movies" component={props => <Movies
                         handleLogOut={handleLogOut}
                         {...props}/>}
+                    />
+                    <Route path="/people" component={People}
                     />
                     <Route path="/billing/complete" component={Complete}
                     />

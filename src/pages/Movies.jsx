@@ -85,7 +85,7 @@ class Movies extends Component {
         this.setState({
             allMovies: movies
         })
-    }
+    };
 
     handleMovieResponse = (response) => {
         switch (response["data"]["resultCode"]) {
@@ -102,7 +102,7 @@ class Movies extends Component {
                 this.props.handleLogOut();
                 break;
         }
-    }
+    };
     //TODO MAKE SURE TO SHOW PAGE WHEN NO MOVIES ARE FOUND. 211?
 
     componentDidMount() {

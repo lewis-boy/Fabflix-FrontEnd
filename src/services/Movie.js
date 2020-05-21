@@ -2,7 +2,7 @@ import Socket from "../util/Socket";
 import { moviesEPs } from "../Config.json";
 import { homePageGenre, homePageLimit } from "../Config.json";
 
-const { randomEP, basicSearchEP, phraseSearchEP, peopleMovieSearchEP, movieIdSearchEP, thumbnailEP} = moviesEPs;
+const { randomEP, basicSearchEP, phraseSearchEP, peopleMovieSearchEP, movieIdSearchEP, thumbnailEP, basicPeopleSearchEP} = moviesEPs;
 
 async function getRandomMovies() {
     const params = {
@@ -34,6 +34,13 @@ async function peopleSearch(query){
     return await Socket.GET( peopleMovieSearchEP + query);
 }
 
+async function basicPeopleSearch(query){
+    return await Socket.GET( basicPeopleSearchEP + query);
+}
+
+
+
+
 async function thumbnail(movieIds) {
     const payload = {
         movie_ids: movieIds
@@ -58,5 +65,6 @@ export default {
     basicSearch,
     peopleSearch,
     movieIdSearch,
-    thumbnail
+    thumbnail,
+    basicPeopleSearch
 };

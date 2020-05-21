@@ -15,7 +15,7 @@ class OneMovie extends Component {
     state = {
         movie: "",
         quantity: 1
-    }
+    };
 
 
     componentDidMount() {

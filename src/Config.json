@@ -5,6 +5,7 @@
   "basicCartMovieUrl": "https://image.tmdb.org/t/p/w92",
   "backdropMovieUrl": "https://image.tmdb.org/t/p/original",
   "basicStarUrl": "https://image.tmdb.org/t/p/original",
+  "basicPersonSearchUrl": "https://image.tmdb.org/t/p/w185",
   "pollLimit": 70,
   "homePageGenre": "comedy",
   "homePageLimit": 10,
