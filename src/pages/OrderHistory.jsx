@@ -121,7 +121,8 @@ class OrderHistory extends Component {
 
         let movieItem =
             <div className="movie-item">
-                <img src={basicCartMovieUrl + this.state.posterMap.get(id)} alt=""/>
+                <img src={basicCartMovieUrl + this.state.posterMap.get(id)}
+                     onError={(e)=>{e.target.onerror = null; e.target.src="https://via.placeholder.com/150"}}/>
                 <h2>X{quantity}</h2>
             </div>;
         return (movieItem);

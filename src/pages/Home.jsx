@@ -56,7 +56,8 @@ class Home extends Component {
         return (
             <div key={passedMovie["movie_id"]} className="slide"
                  style={{transform: "translateX(" + this.state.midX + "%)"}}>
-                <img src={basicMovieUrl + passedMovie["backdrop_path"]} alt=""/>
+                <img src={basicMovieUrl + passedMovie["backdrop_path"]}
+                     onError={(e)=>{e.target.onerror = null; e.target.src="https://via.placeholder.com/150"}}/>
                 <div className="slideshow-info">
                     <h1>{passedMovie["title"]}</h1>
                     <p>
@@ -72,7 +73,8 @@ class Home extends Component {
         return (
             <div key={passedMovie["movie_id"]} className="slide"
                  style={{transform: "translateX(" + this.state.starX + "%)"}}>
-                <img src={basicStarUrl + this.getStarPath(passedMovie)} alt=""/>
+                <img src={basicStarUrl + this.getStarPath(passedMovie)}
+                     onError={(e)=>{e.target.onerror = null; e.target.src="https://via.placeholder.com/150"}}/>
                 <div className="slideshow-info">
                     <h1>{this.getStarName(passedMovie)}</h1>
                     <p>
@@ -196,7 +198,8 @@ class Home extends Component {
                     {frontPage &&
                     <Fragment>
                         <div className="thumbnail">
-                            <img src={basicMovieUrl + frontPage["backdrop_path"]} alt=""/>
+                            <img src={basicMovieUrl + frontPage["backdrop_path"]}
+                                 onError={(e)=>{e.target.onerror = null; e.target.src="https://via.placeholder.com/150"}}/>
                             <div className="movie-info">
                                 <p>
                                     {frontPage["title"]}({frontPage["year"]})

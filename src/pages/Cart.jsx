@@ -133,7 +133,8 @@ class Cart extends Component {
         return (
             <div className="item-wrapper" key={movie_id}>
                 <div className="movie-poster-holder">
-                    <img src={basicCartMovieUrl + item.poster_path} alt=""/>
+                    <img src={basicCartMovieUrl + item.poster_path}
+                         onError={(e)=>{e.target.onerror = null; e.target.src="https://via.placeholder.com/150"}}/>
                     <p>{item["movie_title"]}</p>
                 </div>
                 <div className="editing-holder">

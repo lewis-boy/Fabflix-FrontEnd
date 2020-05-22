@@ -25,18 +25,20 @@ class People extends Component {
         let popularity = person["popularity"] ? person["popularity"] : 0;
         return(
             <div className="person-wrapper" key={person_id}>
-                <img src={basicPersonSearchUrl + profile_path} alt="" />
-                <div className="row">
-                    <h3>Name: </h3>
-                    <h4>{name}</h4>
-                </div>
-                <div className="row">
-                    <h3>Birthday: </h3>
-                    <h4>{birthday}</h4>
-                </div>
-                <div className="row">
-                    <h3>Popularity: </h3>
-                    <h4>{popularity.toFixed(2)}</h4>
+                <img src={basicPersonSearchUrl + profile_path} onError={(e)=>{e.target.onerror = null; e.target.src="https://via.placeholder.com/150"}}/>
+                <div>
+                    <div className="row">
+                        <h3>Name: </h3>
+                        <h4>{name}</h4>
+                    </div>
+                    <div className="row">
+                        <h3>Birthday: </h3>
+                        <h4>{birthday}</h4>
+                    </div>
+                    <div className="row">
+                        <h3>Popularity: </h3>
+                        <h4>{popularity.toFixed(2)}</h4>
+                    </div>
                 </div>
             </div>
         )
@@ -100,6 +102,9 @@ class People extends Component {
                     (rawPeopleResponse.length === 0) && (isMounted) &&
                     <Fragment>
                         <h1>{peopleError}</h1>
+                        <button className="continue-button" onClick={this.props.history.goBack}>Continue
+                            Shopping
+                        </button>
                     </Fragment>
                 }
 
@@ -107,6 +112,9 @@ class People extends Component {
                     (rawPeopleResponse.length !== 0) &&
                     <Fragment>
                         <div className="people-gallery flex-column">{rawPeopleResponse.map(this.createPeopleItem)}</div>
+                        <button className="continue-button" onClick={this.props.history.goBack}>Continue
+                            Shopping
+                        </button>
                     </Fragment>
                 }
 

@@ -44,7 +44,8 @@ class Movies extends Component {
         (
             <div className="movie-item-wrapper" key={movie.movie_id}>
                 <NavLink to={"/movies/get/" + movie.movie_id}>
-                    <img src={basicThumbnailMovieUrl + movie.poster_path} alt=""/>
+                    <img src={basicThumbnailMovieUrl + movie.poster_path}
+                         onError={(e)=>{e.target.onerror = null; e.target.src="https://via.placeholder.com/150"}} />
                 </NavLink>
                 <table className="movie-item">
                     <thead className="head">

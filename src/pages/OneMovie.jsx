@@ -135,7 +135,8 @@ class OneMovie extends Component {
                         <div className="movie-info" style={{backgroundImage: "linear-gradient(to right, rgba(0,0,0,1.0) 30%, rgba(0,0,0,0.1)), " +
                                 "url(" + backdropMovieUrl + movie.backdrop_path + ")"}}>
                             <div className="poster-holder">
-                                <img src={basicThumbnailMovieUrl + movie.poster_path} alt=""/>
+                                <img src={basicThumbnailMovieUrl + movie.poster_path}
+                                     onError={(e)=>{e.target.onerror = null; e.target.src="https://via.placeholder.com/150"}}/>
                                 <span style={{background: ratingColor}}>{rating}</span>
                             </div>
                             <div className="details">
