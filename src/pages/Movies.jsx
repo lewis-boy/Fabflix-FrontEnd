@@ -12,17 +12,19 @@ import ClipLoader from "react-spinners/ClipLoader";
 import {basicThumbnailMovieUrl} from "../Config";
 import {NavLink} from "react-router-dom";
 
-
 class Movies extends Component {
     state = {
-        allMovies: [],
-        errorMessage: ""
+        isMounted: false,
+        errorMessage: "",
+        rawMoviesResponse: [],
+        pageSize: 0,
+        pageNumber: 0
     };
 
     cartClick = (movie_id) => {
-        console.log("Cart button clicked: " + movie_id)
+        console.log("Cart button clicked: " + movie_id);
         Billing.cartInsert(localStorage.getItem("email"), movie_id, 1)
-            .then( response => {
+            .then(response => {
                 this.handleCartInsertResponse(response);
             })
             .catch(error => {
@@ -31,7 +33,7 @@ class Movies extends Component {
     };
 
     handleCartInsertResponse = (response) => {
-        switch(response["data"]["resultCode"]){
+        switch (response["data"]["resultCode"]) {
             case 3100:
                 this.props.history.push("/billing/cart/retrieve");
                 break;
@@ -45,7 +47,10 @@ class Movies extends Component {
             <div className="movie-item-wrapper" key={movie.movie_id}>
                 <NavLink to={"/movies/get/" + movie.movie_id}>
                     <img src={basicThumbnailMovieUrl + movie.poster_path}
-                         onError={(e)=>{e.target.onerror = null; e.target.src="https://via.placeholder.com/150"}} />
+                         onError={(e) => {
+                             e.target.onerror = null;
+                             e.target.src = "https://via.placeholder.com/150"
+                         }}/>
                 </NavLink>
                 <table className="movie-item">
                     <thead className="head">
@@ -81,10 +86,8 @@ class Movies extends Component {
         );
 
     updateMovieTable = (response) => {
-        let movies;
-        movies = <div className="movie-gallery">{response["data"]["movies"].map(this.createMovieItem)}</div>
         this.setState({
-            allMovies: movies
+            rawMoviesResponse: response["data"]["movies"],
         })
     };
 
@@ -96,7 +99,7 @@ class Movies extends Component {
                 break;
             case 211:
                 console.log("we in 211");
-                this.setState({allMovies: []});
+                this.setState({errorMessage: response["data"]["message"]});
                 break;
             default:
                 console.log("we in default");
@@ -104,6 +107,24 @@ class Movies extends Component {
                 break;
         }
     };
+
+    handlePageResponse = (response) => {
+        switch (response["data"]["resultCode"]) {
+            case 210:
+                console.log("we in 210");
+                this.setState({pageSize: response["data"]["movies"].length});
+                break;
+            case 211:
+                console.log("we in 211");
+                this.setState({errorMessage: response["data"]["message"]});
+                break;
+            default:
+                console.log("we in default");
+                this.props.handleLogOut();
+                break;
+        }
+    };
+
     //TODO MAKE SURE TO SHOW PAGE WHEN NO MOVIES ARE FOUND. 211?
 
     componentDidMount() {
@@ -118,32 +139,56 @@ class Movies extends Component {
         switch (this.props.match.path) {
             case "/movies/browse/:phrase":
                 console.log("browse/phrase case");
-                Movie.browseSearch(this.props.match.params.phrase, this.props.location.search)
+                Movie.browseSearch(this.props.match.params.phrase, this.props.location.search + "&limit=100")
+                    .then(response => {
+                        this.handlePageResponse(response);
+                        return (Movie.browseSearch(this.props.match.params.phrase, this.props.location.search))
+                    })
                     .then(response => {
                             this.handleMovieResponse(response);
+                            this.setState({
+                                isMounted: true
+                            });
                         }
                     )
                     .catch(error => {
+                        console.log(error);
                         this.props.history.push("/servererror");
                     });
                 break;
             case "/movies/people":
                 console.log("movies/people case");
-                Movie.peopleSearch(this.props.location.search)
+                Movie.peopleSearch(this.props.location.search + "&limit=100")
+                    .then(response => {
+                        this.handlePageResponse(response);
+                        return (Movie.peopleSearch(this.props.location.search))
+                    })
                     .then(response => {
                         this.handleMovieResponse(response);
+                        this.setState({
+                            isMounted: true
+                        });
                     })
                     .catch(error => {
+                        console.log(error);
                         this.props.history.push("/servererror");
                     });
                 break;
             case "/movies/search":
                 console.log("movies/search case");
-                Movie.basicSearch(this.props.location.search)
+                Movie.basicSearch(this.props.location.search + "&limit=100")
+                    .then(response => {
+                        this.handlePageResponse(response);
+                        return (Movie.basicSearch(this.props.location.search))
+                    })
                     .then(response => {
                         this.handleMovieResponse(response);
+                        this.setState({
+                            isMounted: true
+                        });
                     })
                     .catch(error => {
+                        console.log(error);
                         this.props.history.push("/servererror");
                     });
                 break;
@@ -152,8 +197,12 @@ class Movies extends Component {
                 Movie.search()
                     .then(response => {
                         this.handleMovieResponse(response);
+                        this.setState({
+                            isMounted: true
+                        });
                     })
                     .catch(error => {
+                        console.log(error);
                         this.props.history.push("/servererror");
                     });
         }
@@ -163,25 +212,115 @@ class Movies extends Component {
         this.unlisten();
     }
 
+    createPagination = () => {
+        let pages = [];
+        let amountOfPages = this.state.pageSize / 10;
+        let clicked = "";
+        for (let i = 0; i < amountOfPages; i++) {
+            clicked = (this.state.pageNumber === i) ? "clicked" : "";
+            pages.push(
+                <button className={clicked} id={i} onClick={() => {
+                    this.handlePageClick(i)
+                }}>{i + 1}</button>
+            )
+        }
+        return (
+            pages
+        )
+    };
+
+    //starting at 0
+    handlePageClick = (pageNumber) => {
+        let offset = pageNumber * 10;
+        switch (this.props.match.path) {
+            case "/movies/browse/:phrase":
+                console.log("browse/phrase case");
+                Movie.browseSearch(this.props.match.params.phrase, this.props.location.search + "&offset=" + offset)
+                    .then(response => {
+                            this.handleMovieResponse(response);
+                            this.setState({pageNumber: pageNumber});
+                        }
+                    )
+                    .catch(error => {
+                        console.log(error);
+                        this.props.history.push("/servererror");
+                    });
+                break;
+            case "/movies/people":
+                console.log("movies/people case");
+                Movie.peopleSearch(this.props.location.search + "&offset=" + offset)
+                    .then(response => {
+                        this.handleMovieResponse(response);
+                        this.setState({pageNumber: pageNumber});
+                    })
+                    .catch(error => {
+                        console.log(error);
+                        this.props.history.push("/servererror");
+                    });
+                break;
+            case "/movies/search":
+                console.log("movies/search case");
+                Movie.basicSearch(this.props.location.search + "&offset=" + offset)
+                    .then(response => {
+                        this.handleMovieResponse(response);
+                        this.setState({pageNumber: pageNumber});
+                    })
+                    .catch(error => {
+                        console.log(error);
+                        this.props.history.push("/servererror");
+                    });
+                break;
+            default:
+                console.log("default case");
+                Movie.search(+"offset=" + offset)
+                    .then(response => {
+                        this.handleMovieResponse(response);
+                        this.setState({pageNumber: pageNumber});
+                    })
+                    .catch(error => {
+                        console.log(error);
+                        this.props.history.push("/servererror");
+                    });
+        }
+
+    };
+
 
     render() {
-        const {allMovies} = this.state;
+        const {isMounted, errorMessage, rawMoviesResponse, pageSize} = this.state;
+        console.log(pageSize);
         return (
             <div className="wrapper">
-                {(allMovies.length === 0) &&
-                <Fragment>
-                    <h1>FETCHING YOUR MOVIES</h1>
-                    <ClipLoader
-                        size={150}
-                        color={"#FF0000"}
-                        loading={allMovies.length === 0}
-                    />
-                </Fragment>}
-                {(allMovies.length !== 0) &&
-                <Fragment>
-                    <FilterBar/>
-                    {allMovies}
-                </Fragment>}
+                {
+                    (rawMoviesResponse.length === 0) && (!isMounted) &&
+                    <Fragment>
+                        <h1>FETCHING YOUR MOVIES</h1>
+                        <ClipLoader
+                            size={150}
+                            color={"#FF0000"}
+                            loading={rawMoviesResponse.length === 0}
+                        />
+                    </Fragment>
+                }
+
+                {
+                    (rawMoviesResponse.length === 0) && (isMounted) &&
+                    <Fragment>
+                        <h1>{errorMessage}</h1>
+                    </Fragment>
+                }
+
+
+                {
+                    (rawMoviesResponse.length !== 0) &&
+                    <Fragment>
+                        <FilterBar/>
+                        <div className="movie-gallery">{rawMoviesResponse.map(this.createMovieItem)}</div>
+                        <div className="pagination">
+                            {this.createPagination()}
+                        </div>
+                    </Fragment>
+                }
             </div>);
     }
 }
