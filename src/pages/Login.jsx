@@ -4,7 +4,7 @@ import {Link} from "react-router-dom"
 import Idm from "../services/Idm";
 import {httpErrorCheck} from "../util/ErrorChecking";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import {faExclamationTriangle} from "@fortawesome/free-solid-svg-icons";
+import {faExclamationTriangle, faTicketAlt} from "@fortawesome/free-solid-svg-icons";
 
 import "../css/common.css";
 import "../css/login.css";
@@ -72,42 +72,42 @@ class Login extends Component {
         //todo make the login page erase the fields if login is incorrect(add more to the state)
         //todo have some react elements invisible but turn on when you get your first incorrect login
         return (
-            <div>
-                <h1>Login</h1>
+            <div className="login-wrapper">
+                <FontAwesomeIcon icon={faTicketAlt} size="7x"/>
                 {this.state.errorMessage &&
                     <div className="error-message">
                         <FontAwesomeIcon icon={faExclamationTriangle} size="2x"/>
                         <p>{this.state.errorMessage}</p>
                     </div>
                 }
-                <form onSubmit={this.handleSubmit}>
+                <form className="login-form" onSubmit={this.handleSubmit}>
                     <label className="label">Email</label>
                     <input
-                        className="input"
+                        className="login-input"
                         type="email"
                         name="email"
-                        placeholder="email"
+                        placeholder="Email"
                         value={email}
                         onChange={this.updateField}
-                    ></input>
+                    />
                     <label className="label">Password</label>
                     <input
-                        className="input"
+                        className="login-input"
                         type="password"
                         name="password"
-                        placeholder="password"
+                        placeholder="Password"
                         value={password}
                         onChange={this.updateField}
-                    ></input>
+                    />
                     <input
-                        className="input"
+                        className="login-input"
                         type="password"
                         name="retypedPassword"
-                        placeholder="re-type password"
+                        placeholder="Re-type Password"
                         value={retypedPassword}
                         onChange={this.updateField}
-                    ></input>
-                    <button className="button">Login</button>
+                    />
+                    <button className="login-button">LOGIN</button>
                     <p>Don't have an account? Sign up <Link to="/register">here</Link>.</p>
                 </form>
             </div>

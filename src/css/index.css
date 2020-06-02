@@ -11,13 +11,14 @@
     color: var(--font-color);
     margin: 0;
     padding: 0;
+    /*border: red 1px solid;*/
 }
 
 .app {
     display: flex;
     flex-direction: column;
     max-width: 100vw;
-    min-height: 100vh;
+    min-height: 100%;
     margin: 0;
     padding: 0;
 }
@@ -26,10 +27,9 @@
     display: flex;
     justify-content: center;
     max-width: 100%;
-    min-height: calc(100vh - 45px);
-
+    min-height: calc(100vh - 71px);
     background: rgb(32,32,32);
-    box-shadow: inset 0px 3px 5px -3px #000000;
+    /*box-shadow: inset 0px 3px 5px -3px #000000;*/
 }
 
 .nav-bar {
@@ -50,7 +50,7 @@
     align-items: center;
     justify-content: center;
     width: 100%;
-    height: 80%;
+    min-height: calc(100vh - 71px);
 }
 
 .index-wrapper p {
@@ -58,12 +58,12 @@
     font-weight: bolder;
     font-family: "Times New Roman";
     font-size: 2em;
-    margin: 10px;
+    margin: 10px 0 10px 0;
 }
 
 .index-wrapper .button-wrapper {
     display: flex;
-    margin: 10px;
+    margin: 10px 0 0 0;
 }
 
 .index-wrapper .button-wrapper .button {
@@ -84,6 +84,6 @@
     font-weight: bolder;
     font-family: Impact;
     font-size: 7em;
-    margin: 10px;
+    margin: 0 10px 0 10px;
 }
 

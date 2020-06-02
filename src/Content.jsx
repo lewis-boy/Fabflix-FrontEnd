@@ -22,7 +22,7 @@ class Content extends Component {
     handleFirstVisit = (response) => {
         localStorage.setItem("firstVisit", "false");
         localStorage.setItem("movies", JSON.stringify(response["data"]["movies"]));
-    }
+    };
 
     render() {
         const {handleLogIn, handleLogOut} = this.props;
