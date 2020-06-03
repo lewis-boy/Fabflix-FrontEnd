@@ -31,10 +31,8 @@ class App extends Component {
     localStorage.removeItem("email");
     localStorage.removeItem("movies");
     localStorage.removeItem("firstVisit");
-      console.log("Test 2");
 
     localStorage.removeItem("session_id");
-      console.log("Test 3");
 
     console.log("DELETING EMAIL SESSIONiD TRANSACTIONID REQUEST DELAY");
     delete common["email"];
