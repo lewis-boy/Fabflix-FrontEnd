@@ -10,9 +10,10 @@ import {FontAwesomeIcon} from '@fortawesome/react-fontawesome';
 import {
     faChevronLeft,
     faChevronRight,
-    faCopyright,
+    faCopyright, faSearch, faShoppingCart,
 } from "@fortawesome/free-solid-svg-icons";
 import {Link} from "react-router-dom";
+import Billing from "../services/Billing";
 
 // https://wallpaperaccess.com/full/1561985.jpg
 
@@ -187,6 +188,18 @@ class Home extends Component {
         })
     }
 
+    cartClick = (movie_id) => {
+        console.log("Cart button clicked: " + movie_id);
+        Billing.cartInsert(localStorage.getItem("email"), movie_id, 1)
+            .then(response => {
+                this.handleCartInsertResponse(response);
+            })
+            .catch(error => {
+                console.log(error);
+                this.props.history.push("/servererror");
+            })
+    };
+
     componentDidMount() {
         let map = new Map();
         map.set("1", "Action");
@@ -261,6 +274,9 @@ class Home extends Component {
     render() {
         console.log(this.state);
         const {rawMovies, frontPage} = this.state;
+        let year = frontPage["year"]? frontPage["year"]: "";
+        let director = frontPage["director"]? frontPage["director"]: "";
+        let rating = frontPage["rating"]? frontPage["rating"]: "";
         return (
             <div className="wrapper">
                 {
@@ -275,18 +291,46 @@ class Home extends Component {
                         {
                             frontPage &&
                             <Fragment>
-                                <div className="thumbnail">
-                                    <img src={basicMovieUrl + frontPage["backdrop_path"]}
+                                <div className="front-screen">
+                                    <img className="front-screen-background" src={basicMovieUrl + frontPage["backdrop_path"]}
                                          onError={(e) => {
                                              e.target.onerror = null;
                                              e.target.src = "https://wallpaperaccess.com/full/1561985.jpg"
                                          }}/>
-                                    <div className="movie-info">
-                                        <p>
-                                            {frontPage["title"]}({frontPage["year"]})
-                                        </p>
-                                        {/*<p className="star">{this.getStarName(frontPage)}</p>*/}
+                                    <img className="front-screen-pic" src={basicMovieUrl + frontPage["poster_path"]}
+                                         onError={(e) => {
+                                             e.target.onerror = null;
+                                             e.target.src = "https://wallpaperaccess.com/full/1561985.jpg"
+                                         }}/>
+                                    <div className="front-screen-info">
+                                        <h1> {frontPage["title"]}</h1>
+                                        <div className="button-holder">
+                                            <button
+                                                onClick={() => {
+                                                    this.cartClick(frontPage["movie_id"])
+                                                }}
+                                            >
+                                                <FontAwesomeIcon icon={faShoppingCart} size="2x"/>Add to Cart
+                                            </button>
+                                            <button
+                                                onClick={() => {
+                                                this.infoClick(frontPage["movie_id"])
+                                            }}>
+                                                <FontAwesomeIcon icon={faSearch} size="2x"/>More Info
+                                            </button>
+                                        </div>
+                                        <div className="extra-info">
+                                            {year && <div className="mini-info"><h1>Year</h1><h4>{year}</h4></div>}
+                                            {director && <div className="mini-info"><h1>Director</h1><h4>{director}</h4></div>}
+                                            {rating && <div className="mini-info"><h1>Rating</h1><h4>{rating}</h4></div>}
+                                        </div>
                                     </div>
+                                    {/*<div className="movie-info">*/}
+                                    {/*    <p>*/}
+                                    {/*        {frontPage["title"]}({frontPage["year"]})*/}
+                                    {/*    </p>*/}
+                                    {/*    /!*<p className="star">{this.getStarName(frontPage)}</p>*!/*/}
+                                    {/*</div>*/}
                                 </div>
                                 <div className="trending-scroller">
                                     <h2>Hot {this.state.homeGenre} Movies</h2>

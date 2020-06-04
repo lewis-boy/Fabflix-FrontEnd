@@ -6,6 +6,19 @@
   background-color: black;
 }
 
+.nav-link:hover{
+  cursor: pointer;
+  color: #cc0000;
+}
+
+.shopping-link{
+  padding: 10px;
+  font-size: 20px;
+  color: var(--detail-font-color);
+  text-decoration: none;
+  background-color: black;
+}
+
 
 /*.home-link{*/
 /*  position: absolute;*/
@@ -26,4 +39,8 @@
   background: black;
   border-style: none;
   text-decoration: none;
+}
+
+.nav-button:hover{
+  color: #cc0000;
 }

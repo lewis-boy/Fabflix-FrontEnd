@@ -11,9 +11,18 @@
     color: white;
 }
 
+.fa-shopping-cart path:hover{
+    color: #cc0000;
+}
+
 .fa-layer-group path {
     color: white;
 }
+
+.fa-layer-group path:hover{
+    color: #cc0000;
+}
+
 
 .fa-filter {
     padding-right: 5px;
@@ -44,6 +53,10 @@
     background-color: black;
 }
 
+.navbar-button:hover{
+    cursor: pointer;
+}
+
 .mid-nav-buttons button:hover{
     cursor: pointer;
 }
@@ -65,6 +78,7 @@
     height: 28px;
     border-radius: 4px;
     border: 2px solid rgb(100, 100, 100);
+    outline: none;
 }
 
 .searchBar[type='search'] {
@@ -88,7 +102,7 @@
     transition: opacity 0.5s, transform 0.5s;
     position: absolute;
     z-index: 1;
-    top: 0%;
+    top: 0;
     left: 33%;
     width: 33vw;
     height: 50vh;

@@ -2,7 +2,8 @@ import React, {Component, Fragment} from "react";
 import {NavLink, withRouter} from "react-router-dom";
 
 import "./css/style.css";
-import "./css/navbar.css"
+import "./css/navbar.css";
+
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
 import {faFilter, faShoppingCart, faLayerGroup, faSearch, faTimesCircle} from "@fortawesome/free-solid-svg-icons";
 
@@ -88,7 +89,6 @@ class NavBar extends Component {
         this.setState({[name]: value});
     };
 
-
     render() {
         const {handleLogOut, loggedIn} = this.props;
         const {searchBar, directorBar, starBar, yearBar, genreBar, titleBar} = this.state;
@@ -97,7 +97,7 @@ class NavBar extends Component {
 
         return (
             <nav className="nav-bar">
-                <div className={"extra-filters" + extraHide}>
+                <div className={"extra-filters" + extraHide} ref="modalBox">
                     <button className="exit-button" onClick={this.extraFiltersXClick}>
                         <FontAwesomeIcon icon={faTimesCircle} />
                     </button>
@@ -230,7 +230,7 @@ class NavBar extends Component {
 
 
                 <div className="left-nav-buttons">
-                    <NavLink className="home-link nav-link" to="/home" onClick={this.handleNavClick}>
+                    <NavLink className="home-link nav-link" to="/home">
                         Home
                     </NavLink>
                     {loggedIn &&
@@ -265,7 +265,9 @@ class NavBar extends Component {
                         <button className="navbar-button" onClick={this.extraFiltersClick}>
                             <FontAwesomeIcon icon={faLayerGroup} size="1x"/>
                         </button>
-                        <FontAwesomeIcon icon={faShoppingCart} size="1x"/>
+                        <NavLink className="home-link shopping-link" to="/billing/cart">
+                            <FontAwesomeIcon icon={faShoppingCart} size="1x"/>
+                        </NavLink>
                         <button onClick={handleLogOut} className="nav-button">
                             Log Out
                         </button>
