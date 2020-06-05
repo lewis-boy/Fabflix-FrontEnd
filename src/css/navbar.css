@@ -47,6 +47,10 @@
     word-spacing: -2.5px;
 }
 
+.right-nav-buttons button:hover{
+    cursor: pointer;
+}
+
 .navbar-button{
     border: none;
     outline: none;

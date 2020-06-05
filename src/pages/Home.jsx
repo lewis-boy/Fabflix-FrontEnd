@@ -48,12 +48,17 @@ class Home extends Component {
     getWhatsTrendingIn = (passedMovie) => {
         return (
             //style={{transform: "translateX(" + this.state.midX + "%)"}}
-            <div key={passedMovie["movie_id"]} className="slide">
+            <div key={passedMovie["movie_id"]} className="slide"
+                 style={{transform: "translateX(" + this.state.midX + "%)"}}>
                 <img src={basicMovieUrl + passedMovie["poster_path"]}
                      onError={(e) => {
                          e.target.onerror = null;
                          e.target.src = "https://catalog.osaarchivum.org/assets/thumbnail_placeholder_movie-480596e192e7043677f77cf78b13bdd1.jpg"
                      }}/>
+                <button className="scroll-shopping-button"
+                        onClick={() => {this.cartClick(passedMovie["movie_id"])}}>
+                    <FontAwesomeIcon icon={faShoppingCart} size="1x"/>
+                </button>
                 <h4>{passedMovie["title"]}</h4>
             </div>
         )
@@ -123,11 +128,11 @@ class Home extends Component {
     goRight = ({target}) => {
         const {name} = target;
         if (name === "midX") {
-            this.state[name] === -100 * (this.state.midPageSlide.length - 1) ?
+            this.state[name] <= -100 * (this.state.midPageSlide.length - 1) ?
                 this.setState({[name]: 0}) :
                 this.setState((prevState) => {
                     return {
-                        [name]: prevState[name] - 100
+                        [name]: prevState[name] - 103.5
                     };
                 })
         } else {
@@ -274,9 +279,9 @@ class Home extends Component {
     render() {
         console.log(this.state);
         const {rawMovies, frontPage} = this.state;
-        let year = frontPage["year"]? frontPage["year"]: "";
-        let director = frontPage["director"]? frontPage["director"]: "";
-        let rating = frontPage["rating"]? frontPage["rating"]: "";
+        let year = frontPage["year"] ? frontPage["year"] : "";
+        let director = frontPage["director"] ? frontPage["director"] : "";
+        let rating = frontPage["rating"] ? frontPage["rating"] : "";
         return (
             <div className="wrapper">
                 {
@@ -292,7 +297,8 @@ class Home extends Component {
                             frontPage &&
                             <Fragment>
                                 <div className="front-screen">
-                                    <img className="front-screen-background" src={basicMovieUrl + frontPage["backdrop_path"]}
+                                    <img className="front-screen-background"
+                                         src={basicMovieUrl + frontPage["backdrop_path"]}
                                          onError={(e) => {
                                              e.target.onerror = null;
                                              e.target.src = "https://wallpaperaccess.com/full/1561985.jpg"
@@ -314,28 +320,29 @@ class Home extends Component {
                                             </button>
                                             <button
                                                 onClick={() => {
-                                                this.infoClick(frontPage["movie_id"])
-                                            }}>
+                                                    this.infoClick(frontPage["movie_id"])
+                                                }}>
                                                 <FontAwesomeIcon icon={faSearch} size="2x"/>More Info
                                             </button>
                                         </div>
                                         <div className="extra-info">
                                             {year && <div className="mini-info"><h1>Year</h1><h4>{year}</h4></div>}
-                                            {director && <div className="mini-info"><h1>Director</h1><h4>{director}</h4></div>}
-                                            {rating && <div className="mini-info"><h1>Rating</h1><h4>{rating}</h4></div>}
+                                            {director &&
+                                            <div className="mini-info"><h1>Director</h1><h4>{director}</h4></div>}
+                                            {rating &&
+                                            <div className="mini-info"><h1>Rating</h1><h4>{rating}</h4></div>}
                                         </div>
                                     </div>
-                                    {/*<div className="movie-info">*/}
-                                    {/*    <p>*/}
-                                    {/*        {frontPage["title"]}({frontPage["year"]})*/}
-                                    {/*    </p>*/}
-                                    {/*    /!*<p className="star">{this.getStarName(frontPage)}</p>*!/*/}
-                                    {/*</div>*/}
                                 </div>
                                 <div className="trending-scroller">
                                     <h2>Hot {this.state.homeGenre} Movies</h2>
-                                    <div
-                                        className="scroller-container">{this.state.rawMovies.map(this.getWhatsTrendingIn)}</div>
+                                    <div className="scroller-container">
+                                        {this.state.rawMovies.map(this.getWhatsTrendingIn)}
+                                        <button id="go-right1" className="slide-button" onClick={this.goRight}
+                                                name="midX">
+                                            <FontAwesomeIcon icon={faChevronRight} size="2x"/>
+                                        </button>
+                                    </div>
                                 </div>
                                 {/*<div className="thumbnail-slider">*/}
                                 {/*    {midPageSlide.map(this.getMidSlideShow)}*/}
