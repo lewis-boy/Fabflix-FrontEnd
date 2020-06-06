@@ -49,7 +49,8 @@ class Movies extends Component {
                     <img src={basicThumbnailMovieUrl + movie.poster_path}
                          onError={(e) => {
                              e.target.onerror = null;
-                             e.target.src = "https://via.placeholder.com/150"
+                             e.target.src = "https://catalog.osaarchivum.org/assets/thumbnail_placeholder_movie-480596e192e7043677f77cf78b13bdd1.jpg";
+                             e.target.className = "placeholder-image"
                          }}/>
                 </NavLink>
                 <table className="movie-item">

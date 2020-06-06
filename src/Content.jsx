@@ -52,6 +52,9 @@ class Content extends Component {
                     <Route path="/movies/get/:movie_id" component={props => <OneMovie
                         {...props} />}
                     />
+                    <Route path="/movies/people/get/:person_id" component={props => <OneMovie
+                        {...props} />}
+                    />
                     <Route path="/movies/search" component={props => <Movies
                         handleLogOut={handleLogOut}
                         {...props}/>}
