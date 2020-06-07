@@ -5,13 +5,11 @@
     margin: 0 0;
     padding: 0;
     display: flex;
-    outline: 3px red solid;
 }
 
 
 .wrapper .movie-holder{
     min-height: calc(100vh - 300px);
-    outline: 3px yellow solid;
     display: flex;
     flex-direction: column;
     background-color: rgb(8,8,8);

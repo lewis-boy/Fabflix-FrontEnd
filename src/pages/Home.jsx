@@ -15,6 +15,8 @@ import {
 import {Link} from "react-router-dom";
 import Billing from "../services/Billing";
 
+import {NavLink} from "react-router-dom";
+
 // https://wallpaperaccess.com/full/1561985.jpg
 
 
@@ -205,6 +207,16 @@ class Home extends Component {
             })
     };
 
+    handleCartInsertResponse = (response) => {
+        switch (response["data"]["resultCode"]) {
+            case 3100:
+                this.props.history.push("/billing/cart/retrieve");
+                break;
+            default:
+                break;
+        }
+    };
+
     componentDidMount() {
         let map = new Map();
         map.set("1", "Action");
@@ -318,12 +330,9 @@ class Home extends Component {
                                             >
                                                 <FontAwesomeIcon icon={faShoppingCart} size="2x"/>Add to Cart
                                             </button>
-                                            <button
-                                                onClick={() => {
-                                                    this.infoClick(frontPage["movie_id"])
-                                                }}>
+                                            <NavLink to={"/movies/get/" + frontPage["movie_id"]}>
                                                 <FontAwesomeIcon icon={faSearch} size="2x"/>More Info
-                                            </button>
+                                            </NavLink>
                                         </div>
                                         <div className="extra-info">
                                             {year && <div className="mini-info"><h1>Year</h1><h4>{year}</h4></div>}

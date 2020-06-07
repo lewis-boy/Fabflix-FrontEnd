@@ -43,7 +43,9 @@ class Cart extends Component {
             case 3120:
                 this.setState((prevState) => {
                     return {
-                        rawCartMovies: prevState.rawCartMovies.filter(item => item.movie_id !== movie_id)
+                        rawCartMovies: prevState.rawCartMovies.filter(item => item.movie_id !== movie_id),
+                        movieIds: prevState.movieIds.filter(id => id !== movie_id),
+                        [movie_id + "Price"]: 0
                     };
                 });
                 break;
@@ -134,7 +136,11 @@ class Cart extends Component {
             <div className="item-wrapper" key={movie_id}>
                 <div className="movie-poster-holder">
                     <img src={basicCartMovieUrl + item.poster_path}
-                         onError={(e)=>{e.target.onerror = null; e.target.src="https://via.placeholder.com/150"}}/>
+                         onError={(e) => {
+                             e.target.onerror = null;
+                             e.target.src = "https://catalog.osaarchivum.org/assets/thumbnail_placeholder_movie-480596e192e7043677f77cf78b13bdd1.jpg";
+                             e.target.className = "placeholder-image"
+                         }}/>
                     <p>{item["movie_title"]}</p>
                 </div>
                 <div className="editing-holder">
@@ -160,7 +166,7 @@ class Cart extends Component {
                                 Your cart has been updated!
                             </div>
                         </div>
-                        <span className="cart-info-span">${(this.state[movie_id + "Price"] * this.state[movie_id])}</span>
+                        <span className="cart-info-span">${(this.state[movie_id + "Price"] * this.state[movie_id]).toFixed(2)}</span>
                         <button className="trash-button"
                                 onClick={() => {
                                     this.handleRemoveClick(movie_id)

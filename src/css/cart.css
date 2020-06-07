@@ -277,3 +277,8 @@
     cursor: pointer;
 }
 
+.placeholder-image{
+    width: 6vw;
+    height: 100%;
+}
+
